@@ -1,13 +1,14 @@
 import React from 'react';
-import axios from 'axios';
-//import { axiosWithAuth } from '../utils/axiosWithAuth';
+//import axios from 'axios';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 class Login extends React.Component {
     state = {
         credentials: {
             username: '',
             password: ''
-        }
+        },
+        login: false
     };
 
     handleChange = e => {
@@ -19,19 +20,28 @@ class Login extends React.Component {
         });
     };
 
+    // componentDidMount = () => {
+    //   let token = localStorage.getItem('token');
+    //     if(token){
+    //         this.setState.login = true;
+    //     }
+    // };
+
     login = e => {
         e.preventDefault();
-
-        axios
-        .post('https://localhost:3000/api/login', this.state.credentials)
-        .then(res => {
-            console.log(res.data, 'login console')
-            localStorage.setItem('token', JSON.stringify(res.data));
-            this.props.history.push('/protected');
-        })
-        .catch(err => console.log(err.response));
-    };
-
+            axiosWithAuth()
+            .post('/api/login', this.state.credentials)
+            .then(res => {
+                console.log(res.data, 'login console')
+                localStorage.setItem('token', res.data.payload);
+                // if(token){
+                //     this.setState.login = true;
+                // }
+                this.props.history.push('/protected');
+            })
+            .catch(err => console.log(err.response)); 
+        }
+    
     render() {
         return (
             <div>

@@ -1,8 +1,8 @@
 import React from 'react';
 // import moment from 'moment';
 // import Loader from 'react-loader-spinner';
-import axios from 'axios';
-//import { axiosWithAuth } from '../utils/axiosWithAuth';
+//import axios from 'axios';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 class Friends extends React.Component {
     state = {
@@ -14,8 +14,8 @@ class Friends extends React.Component {
     }
 
     getFriends = () => {
-        axios
-        .get('https://localhost:5000/api/friends')
+        axiosWithAuth()
+        .get('/api/friends')
         .then(res => {
             console.log(res.data, 'friends console');
 
@@ -23,11 +23,21 @@ class Friends extends React.Component {
                 friends: res.data
             })
         })
-
+        .catch(err => console.log(err));
     }
 
+    
+
     render(){
-        return
+        return (
+            <div>
+                {this.state.friends.map(friend => {
+                    return(
+                        <h2>{friend.name}</h2>
+                    )
+                })}
+            </div>
+        )
     }
 };
 
